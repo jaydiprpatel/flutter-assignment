@@ -40,10 +40,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget getMainView() {
-    return Container(
-        child: Scaffold(
-      resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.transparent,
+    return Scaffold(
       body: Column(
         children: <Widget>[
           Container(
@@ -52,11 +49,10 @@ class _HomeState extends State<Home> {
               child: getcontainer(_page),
             ),
           ),
-
-            bottomList(),
+          bottomList(),
         ],
       ),
-    ));
+    );
   }
 
   Widget bottomList() {
