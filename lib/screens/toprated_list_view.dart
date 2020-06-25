@@ -69,11 +69,14 @@ class _TopRatedMovieState extends State<TopRatedMovieChild>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? Container(
-              child: showProgress(),
-            )
-          : showMovieList(),
+      body: SingleChildScrollView(
+        child: isLoading
+            ? Container(
+          height: MediaQuery.of(context).size.height,
+          child: showProgress(),
+        )
+            : showMovieList(),
+      ),
     );
   }
 
@@ -164,45 +167,49 @@ class _TopRatedMovieState extends State<TopRatedMovieChild>
                           margin: EdgeInsets.only(left: 5),
                           child: Image.network(_list != null
                               ? "https://image.tmdb.org/t/p/w342" +
-                                  _list[index].posterPath
+                              _list[index].posterPath
                               : ""),
                           height: 130,
                         ),
                         SizedBox(
                           width: 5,
                         ),
-                        Container(
-                          height: 130,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  _list != null ? _list[index].title : "",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 5,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                  textAlign: TextAlign.justify,
-                                ),
+                        Wrap(
+                          children: <Widget>[
+                            Container(
+//                              height: 130,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: MediaQuery.of(context).size.width - 102,
+                                    alignment: Alignment.topLeft,
+                                    child: AutoSizeText(
+                                      _list != null ? _list[index].title : "",
+                                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                  SizedBox(height: 7),
+                                  Wrap(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width - 102,
+                                        child: AutoSizeText(
+                                          _list != null ? _list[index].overview : "",
+                                          style: TextStyle(fontSize: 15.0),
+                                          maxLines: 5,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
-                              SizedBox(height:7),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 100,
-                                height: 100.0,
-                                child: AutoSizeText(
-                                  _list != null ? _list[index].overview : "",
-                                  style: TextStyle(fontSize: 15.0),
-                                  maxLines: 5,
-                                ),
-                              ),
-
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+
                       ],
                     ),
                     Container(
