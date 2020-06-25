@@ -44,10 +44,10 @@ class _MoviesListViewState extends State<MoviesListViewChild>
   void filterSearchResults(String query) {
     List<Results> dummySearchList = List<Results>();
     dummySearchList.addAll(_list);
-    if(query.isNotEmpty) {
+    if (query.isNotEmpty) {
       List<Results> dummyListData = List<Results>();
       dummySearchList.forEach((item) {
-        if(item.title.contains(query)) {
+        if (item.title.contains(query)) {
           dummyListData.add(item);
         }
       });
@@ -59,20 +59,21 @@ class _MoviesListViewState extends State<MoviesListViewChild>
     } else if (query == null || query == "") {
       _moviesListPresenter.reqUserList();
       isLoading = true;
-      setState(() {
-      });
+      setState(() {});
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? Container(
-              child: showProgress(),
-            )
-          : showMovieList(),
+      body: SingleChildScrollView(
+        child: isLoading
+            ? Container(
+          height: MediaQuery.of(context).size.height,
+                child: showProgress(),
+              )
+            : showMovieList(),
+      ),
     );
   }
 
@@ -113,8 +114,7 @@ class _MoviesListViewState extends State<MoviesListViewChild>
                   onTap: () {
                     _moviesListPresenter.reqUserList();
                     isLoading = true;
-                    setState(() {
-                    });
+                    setState(() {});
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: 10),
@@ -131,7 +131,7 @@ class _MoviesListViewState extends State<MoviesListViewChild>
             children: <Widget>[
               Container(
                 color: appColor,
-                height: MediaQuery.of(context).size.height - 144,
+                height: MediaQuery.of(context).size.height,
                 child: getList1(),
               ),
             ],
@@ -170,38 +170,43 @@ class _MoviesListViewState extends State<MoviesListViewChild>
                         SizedBox(
                           width: 5,
                         ),
-                        Container(
-                          height: 130,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  _list != null ? _list[index].title : "",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 5,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                  textAlign: TextAlign.justify,
-                                ),
+                        Wrap(
+                          children: <Widget>[
+                            Container(
+//                              height: 130,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: MediaQuery.of(context).size.width - 100,
+                                    alignment: Alignment.topLeft,
+                                    child: AutoSizeText(
+                                      _list != null ? _list[index].title : "",
+                                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                  SizedBox(height: 7),
+                                  Wrap(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width - 100,
+//                                    height: 100.0,
+                                        child: AutoSizeText(
+                                          _list != null ? _list[index].overview : "",
+                                          style: TextStyle(fontSize: 15.0),
+                                          maxLines: 5,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
-                              SizedBox(height:7),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 100,
-                                height: 100.0,
-                                child: AutoSizeText(
-                                  _list != null ? _list[index].overview : "",
-                                  style: TextStyle(fontSize: 15.0),
-                                  maxLines: 5,
-                                ),
-                              ),
-
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+
                       ],
                     ),
                     Container(
@@ -234,5 +239,4 @@ class _MoviesListViewState extends State<MoviesListViewChild>
     }
     setState(() {});
   }
-
 }
